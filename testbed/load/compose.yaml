@@ -1,0 +1,18 @@
+# Генератор нагрузки (на стенде — узел node3).
+#   BASE_URL=http://<NODE1_IP>:8000 docker compose up -d
+name: shop-load
+
+services:
+  k6:
+    image: grafana/k6:2.3.0
+    command: ["run", "--quiet", "--no-summary", "/scripts/shop.js"]
+    environment:
+      BASE_URL: ${BASE_URL:-http://host.docker.internal:8000}
+      BASE_RPS: ${BASE_RPS:-20}
+      CYCLE_MINUTES: ${CYCLE_MINUTES:-60}
+      TOTAL_HOURS: ${TOTAL_HOURS:-168}
+    volumes:
+      - ./shop.js:/scripts/shop.js:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped

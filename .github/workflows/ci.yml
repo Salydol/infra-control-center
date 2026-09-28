@@ -89,3 +89,28 @@ jobs:
         run: docker compose logs
       - if: always()
         run: docker compose down -v
+
+  testbed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: testbed/app/global.json
+      - run: dotnet build testbed/app/Shop.slnx -c Release
+      - name: Запуск магазина
+        working-directory: testbed/app/deploy
+        run: |
+          cp .env.example .env
+          docker compose -f compose.yaml -f compose.distributed.yaml config --quiet
+          docker compose up -d --build --wait --wait-timeout 300
+      - name: Смоук-нагрузка k6 (30 с, ошибок < 1%)
+        working-directory: testbed/load
+        run: |
+          docker run --rm --network host -v "$PWD/shop.js:/scripts/shop.js:ro" \
+            -e SMOKE=1 -e BASE_URL=http://localhost:8000 -e BASE_RPS=10 \
+            -e CYCLE_MINUTES=0.5 -e TOTAL_HOURS=0.0084 \
+            grafana/k6:2.3.0 run --quiet /scripts/shop.js
+      - if: failure()
+        working-directory: testbed/app/deploy
+        run: docker compose logs

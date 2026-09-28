@@ -1,0 +1,36 @@
+# Надстройка для стенда из трёх ВМ: сервисы находят зависимости на других
+# узлах по IP (NODE1_IP, NODE2_IP, NODE3_IP из .env), а зависимости
+# публикуют порты на хосте.
+#
+#   docker compose -f compose.yaml -f compose.distributed.yaml up -d
+services:
+  api:
+    extra_hosts:
+      - "postgres:${NODE3_IP}"
+
+  catalog:
+    extra_hosts:
+      - "postgres:${NODE3_IP}"
+      - "redis:${NODE2_IP}"
+
+  rabbitmq:
+    ports:
+      - "5672:5672"
+
+  payments-worker:
+    extra_hosts:
+      - "postgres:${NODE3_IP}"
+      - "rabbitmq:${NODE1_IP}"
+
+  notifications-worker:
+    extra_hosts:
+      - "postgres:${NODE3_IP}"
+      - "rabbitmq:${NODE1_IP}"
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  postgres:
+    ports:
+      - "5432:5432"

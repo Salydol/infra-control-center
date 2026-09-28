@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Shop.Api/Shop.Api.csproj" />
+    <Project Path="src/Shop.Catalog/Shop.Catalog.csproj" />
+    <Project Path="src/Shop.Common/Shop.Common.csproj" />
+    <Project Path="src/Shop.NotificationsWorker/Shop.NotificationsWorker.csproj" />
+    <Project Path="src/Shop.PaymentsWorker/Shop.PaymentsWorker.csproj" />
+  </Folder>
+</Solution>
