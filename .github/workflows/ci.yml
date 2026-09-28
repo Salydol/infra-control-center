@@ -85,8 +85,26 @@ jobs:
       - run: docker compose build
       - run: docker compose up -d --wait --wait-timeout 180
       - run: curl -fsS http://localhost:8088/api/version
+      - name: Агент регистрируется и шлёт метрики
+        run: |
+          TOKEN=$(docker compose exec -T backend dotnet Icc.ControlPlane.dll agents create-token | tail -1)
+          cd testbed/agent
+          ICC_TOKEN="$TOKEN" ICC_CENTER=localhost:9090 docker compose up -d --build
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:8088/api/agents | grep -q '"online"' && break
+            sleep 2
+          done
+          curl -fsS http://localhost:8088/api/agents | grep '"online"'
+          for i in $(seq 1 30); do
+            curl -fsS "http://localhost:8428/api/v1/query?query=host_cpu_usage_ratio" | grep -q agent_id && break
+            sleep 3
+          done
+          curl -fsS "http://localhost:8428/api/v1/query?query=count(container_up)" | grep -v '"result":\[\]'
+          curl -fsS "http://localhost:8428/api/v1/query?query=host_cpu_usage_ratio" | grep agent_id
       - if: failure()
-        run: docker compose logs
+        run: |
+          docker compose logs
+          docker compose -f testbed/agent/compose.yaml logs
       - if: always()
         run: docker compose down -v
 
@@ -98,6 +116,16 @@ jobs:
         with:
           global-json-file: testbed/app/global.json
       - run: dotnet build testbed/app/Shop.slnx -c Release
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Тесты инжектора сбоев
+        working-directory: testbed/faults
+        run: |
+          pip install pytest ruff
+          ruff check .
+          ruff format --check .
+          python -m pytest
       - name: Запуск магазина
         working-directory: testbed/app/deploy
         run: |

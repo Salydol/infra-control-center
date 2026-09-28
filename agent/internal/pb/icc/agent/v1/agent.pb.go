@@ -71,7 +71,87 @@ func (x ContainerAction_Kind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ContainerAction_Kind.Descriptor instead.
 func (ContainerAction_Kind) EnumDescriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{11, 0}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{13, 0}
+}
+
+type GetCenterInfoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCenterInfoRequest) Reset() {
+	*x = GetCenterInfoRequest{}
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCenterInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCenterInfoRequest) ProtoMessage() {}
+
+func (x *GetCenterInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCenterInfoRequest.ProtoReflect.Descriptor instead.
+func (*GetCenterInfoRequest) Descriptor() ([]byte, []int) {
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{0}
+}
+
+type GetCenterInfoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CaCertPem     string                 `protobuf:"bytes,1,opt,name=ca_cert_pem,json=caCertPem,proto3" json:"ca_cert_pem,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCenterInfoResponse) Reset() {
+	*x = GetCenterInfoResponse{}
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCenterInfoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCenterInfoResponse) ProtoMessage() {}
+
+func (x *GetCenterInfoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCenterInfoResponse.ProtoReflect.Descriptor instead.
+func (*GetCenterInfoResponse) Descriptor() ([]byte, []int) {
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GetCenterInfoResponse) GetCaCertPem() string {
+	if x != nil {
+		return x.CaCertPem
+	}
+	return ""
 }
 
 type RegisterRequest struct {
@@ -88,7 +168,7 @@ type RegisterRequest struct {
 
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[0]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -100,7 +180,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[0]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -113,7 +193,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{0}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RegisterRequest) GetToken() string {
@@ -158,7 +238,7 @@ type RegisterResponse struct {
 
 func (x *RegisterResponse) Reset() {
 	*x = RegisterResponse{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[1]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -170,7 +250,7 @@ func (x *RegisterResponse) String() string {
 func (*RegisterResponse) ProtoMessage() {}
 
 func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[1]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -183,7 +263,7 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
 func (*RegisterResponse) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{1}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RegisterResponse) GetAgentId() string {
@@ -236,7 +316,7 @@ type ConnectRequest struct {
 
 func (x *ConnectRequest) Reset() {
 	*x = ConnectRequest{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[2]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -248,7 +328,7 @@ func (x *ConnectRequest) String() string {
 func (*ConnectRequest) ProtoMessage() {}
 
 func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[2]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -261,7 +341,7 @@ func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConnectRequest.ProtoReflect.Descriptor instead.
 func (*ConnectRequest) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{2}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ConnectRequest) GetSeq() uint64 {
@@ -423,7 +503,7 @@ type Hello struct {
 
 func (x *Hello) Reset() {
 	*x = Hello{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[3]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -435,7 +515,7 @@ func (x *Hello) String() string {
 func (*Hello) ProtoMessage() {}
 
 func (x *Hello) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[3]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -448,7 +528,7 @@ func (x *Hello) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Hello.ProtoReflect.Descriptor instead.
 func (*Hello) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{3}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Hello) GetAgentId() string {
@@ -491,7 +571,7 @@ type Heartbeat struct {
 
 func (x *Heartbeat) Reset() {
 	*x = Heartbeat{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[4]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -503,7 +583,7 @@ func (x *Heartbeat) String() string {
 func (*Heartbeat) ProtoMessage() {}
 
 func (x *Heartbeat) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[4]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -516,7 +596,7 @@ func (x *Heartbeat) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Heartbeat.ProtoReflect.Descriptor instead.
 func (*Heartbeat) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{4}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Heartbeat) GetBufferedMessages() uint64 {
@@ -553,7 +633,7 @@ type CommandResult struct {
 
 func (x *CommandResult) Reset() {
 	*x = CommandResult{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[5]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -565,7 +645,7 @@ func (x *CommandResult) String() string {
 func (*CommandResult) ProtoMessage() {}
 
 func (x *CommandResult) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[5]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -578,7 +658,7 @@ func (x *CommandResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommandResult.ProtoReflect.Descriptor instead.
 func (*CommandResult) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{5}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CommandResult) GetCommandId() string {
@@ -623,7 +703,7 @@ type ConnectResponse struct {
 
 func (x *ConnectResponse) Reset() {
 	*x = ConnectResponse{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[6]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -635,7 +715,7 @@ func (x *ConnectResponse) String() string {
 func (*ConnectResponse) ProtoMessage() {}
 
 func (x *ConnectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[6]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -648,7 +728,7 @@ func (x *ConnectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConnectResponse.ProtoReflect.Descriptor instead.
 func (*ConnectResponse) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{6}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ConnectResponse) GetPayload() isConnectResponse_Payload {
@@ -716,7 +796,7 @@ type HelloAck struct {
 
 func (x *HelloAck) Reset() {
 	*x = HelloAck{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[7]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -728,7 +808,7 @@ func (x *HelloAck) String() string {
 func (*HelloAck) ProtoMessage() {}
 
 func (x *HelloAck) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[7]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -741,7 +821,7 @@ func (x *HelloAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloAck.ProtoReflect.Descriptor instead.
 func (*HelloAck) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{7}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *HelloAck) GetConfig() *AgentConfig {
@@ -768,7 +848,7 @@ type AgentConfig struct {
 
 func (x *AgentConfig) Reset() {
 	*x = AgentConfig{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[8]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -780,7 +860,7 @@ func (x *AgentConfig) String() string {
 func (*AgentConfig) ProtoMessage() {}
 
 func (x *AgentConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[8]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -793,7 +873,7 @@ func (x *AgentConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgentConfig.ProtoReflect.Descriptor instead.
 func (*AgentConfig) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{8}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AgentConfig) GetHeartbeatIntervalSeconds() uint32 {
@@ -841,7 +921,7 @@ type Ack struct {
 
 func (x *Ack) Reset() {
 	*x = Ack{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[9]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -853,7 +933,7 @@ func (x *Ack) String() string {
 func (*Ack) ProtoMessage() {}
 
 func (x *Ack) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[9]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -866,7 +946,7 @@ func (x *Ack) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ack.ProtoReflect.Descriptor instead.
 func (*Ack) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{9}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Ack) GetSeq() uint64 {
@@ -902,7 +982,7 @@ type Command struct {
 
 func (x *Command) Reset() {
 	*x = Command{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[10]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -914,7 +994,7 @@ func (x *Command) String() string {
 func (*Command) ProtoMessage() {}
 
 func (x *Command) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[10]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -927,7 +1007,7 @@ func (x *Command) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Command.ProtoReflect.Descriptor instead.
 func (*Command) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{10}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Command) GetId() string {
@@ -1015,7 +1095,7 @@ type ContainerAction struct {
 
 func (x *ContainerAction) Reset() {
 	*x = ContainerAction{}
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[11]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1027,7 +1107,7 @@ func (x *ContainerAction) String() string {
 func (*ContainerAction) ProtoMessage() {}
 
 func (x *ContainerAction) ProtoReflect() protoreflect.Message {
-	mi := &file_icc_agent_v1_agent_proto_msgTypes[11]
+	mi := &file_icc_agent_v1_agent_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1040,7 +1120,7 @@ func (x *ContainerAction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ContainerAction.ProtoReflect.Descriptor instead.
 func (*ContainerAction) Descriptor() ([]byte, []int) {
-	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{11}
+	return file_icc_agent_v1_agent_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ContainerAction) GetKind() ContainerAction_Kind {
@@ -1061,7 +1141,10 @@ var File_icc_agent_v1_agent_proto protoreflect.FileDescriptor
 
 const file_icc_agent_v1_agent_proto_rawDesc = "" +
 	"\n" +
-	"\x18icc/agent/v1/agent.proto\x12\ficc.agent.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1aicc/agent/v1/changes.proto\x1a\x1cicc/agent/v1/inventory.proto\x1a\x1cicc/agent/v1/telemetry.proto\"\x91\x01\n" +
+	"\x18icc/agent/v1/agent.proto\x12\ficc.agent.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1aicc/agent/v1/changes.proto\x1a\x1cicc/agent/v1/inventory.proto\x1a\x1cicc/agent/v1/telemetry.proto\"\x16\n" +
+	"\x14GetCenterInfoRequest\"7\n" +
+	"\x15GetCenterInfoResponse\x12\x1e\n" +
+	"\vca_cert_pem\x18\x01 \x01(\tR\tcaCertPem\"\x91\x01\n" +
 	"\x0fRegisterRequest\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x17\n" +
 	"\acsr_pem\x18\x02 \x01(\tR\x06csrPem\x12*\n" +
@@ -1137,8 +1220,9 @@ const file_icc_agent_v1_agent_proto_rawDesc = "" +
 	"\n" +
 	"KIND_START\x10\x01\x12\r\n" +
 	"\tKIND_STOP\x10\x02\x12\x10\n" +
-	"\fKIND_RESTART\x10\x032\xa5\x01\n" +
-	"\fAgentService\x12I\n" +
+	"\fKIND_RESTART\x10\x032\xff\x01\n" +
+	"\fAgentService\x12X\n" +
+	"\rGetCenterInfo\x12\".icc.agent.v1.GetCenterInfoRequest\x1a#.icc.agent.v1.GetCenterInfoResponse\x12I\n" +
 	"\bRegister\x12\x1d.icc.agent.v1.RegisterRequest\x1a\x1e.icc.agent.v1.RegisterResponse\x12J\n" +
 	"\aConnect\x12\x1c.icc.agent.v1.ConnectRequest\x1a\x1d.icc.agent.v1.ConnectResponse(\x010\x01B\x9c\x01\n" +
 	"\x10com.icc.agent.v1B\n" +
@@ -1157,56 +1241,60 @@ func file_icc_agent_v1_agent_proto_rawDescGZIP() []byte {
 }
 
 var file_icc_agent_v1_agent_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_icc_agent_v1_agent_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_icc_agent_v1_agent_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_icc_agent_v1_agent_proto_goTypes = []any{
 	(ContainerAction_Kind)(0),     // 0: icc.agent.v1.ContainerAction.Kind
-	(*RegisterRequest)(nil),       // 1: icc.agent.v1.RegisterRequest
-	(*RegisterResponse)(nil),      // 2: icc.agent.v1.RegisterResponse
-	(*ConnectRequest)(nil),        // 3: icc.agent.v1.ConnectRequest
-	(*Hello)(nil),                 // 4: icc.agent.v1.Hello
-	(*Heartbeat)(nil),             // 5: icc.agent.v1.Heartbeat
-	(*CommandResult)(nil),         // 6: icc.agent.v1.CommandResult
-	(*ConnectResponse)(nil),       // 7: icc.agent.v1.ConnectResponse
-	(*HelloAck)(nil),              // 8: icc.agent.v1.HelloAck
-	(*AgentConfig)(nil),           // 9: icc.agent.v1.AgentConfig
-	(*Ack)(nil),                   // 10: icc.agent.v1.Ack
-	(*Command)(nil),               // 11: icc.agent.v1.Command
-	(*ContainerAction)(nil),       // 12: icc.agent.v1.ContainerAction
-	(*HostInfo)(nil),              // 13: icc.agent.v1.HostInfo
-	(*timestamppb.Timestamp)(nil), // 14: google.protobuf.Timestamp
-	(*InventorySnapshot)(nil),     // 15: icc.agent.v1.InventorySnapshot
-	(*MetricBatch)(nil),           // 16: icc.agent.v1.MetricBatch
-	(*LogBatch)(nil),              // 17: icc.agent.v1.LogBatch
-	(*ChangeEvent)(nil),           // 18: icc.agent.v1.ChangeEvent
-	(*RuntimeEvent)(nil),          // 19: icc.agent.v1.RuntimeEvent
+	(*GetCenterInfoRequest)(nil),  // 1: icc.agent.v1.GetCenterInfoRequest
+	(*GetCenterInfoResponse)(nil), // 2: icc.agent.v1.GetCenterInfoResponse
+	(*RegisterRequest)(nil),       // 3: icc.agent.v1.RegisterRequest
+	(*RegisterResponse)(nil),      // 4: icc.agent.v1.RegisterResponse
+	(*ConnectRequest)(nil),        // 5: icc.agent.v1.ConnectRequest
+	(*Hello)(nil),                 // 6: icc.agent.v1.Hello
+	(*Heartbeat)(nil),             // 7: icc.agent.v1.Heartbeat
+	(*CommandResult)(nil),         // 8: icc.agent.v1.CommandResult
+	(*ConnectResponse)(nil),       // 9: icc.agent.v1.ConnectResponse
+	(*HelloAck)(nil),              // 10: icc.agent.v1.HelloAck
+	(*AgentConfig)(nil),           // 11: icc.agent.v1.AgentConfig
+	(*Ack)(nil),                   // 12: icc.agent.v1.Ack
+	(*Command)(nil),               // 13: icc.agent.v1.Command
+	(*ContainerAction)(nil),       // 14: icc.agent.v1.ContainerAction
+	(*HostInfo)(nil),              // 15: icc.agent.v1.HostInfo
+	(*timestamppb.Timestamp)(nil), // 16: google.protobuf.Timestamp
+	(*InventorySnapshot)(nil),     // 17: icc.agent.v1.InventorySnapshot
+	(*MetricBatch)(nil),           // 18: icc.agent.v1.MetricBatch
+	(*LogBatch)(nil),              // 19: icc.agent.v1.LogBatch
+	(*ChangeEvent)(nil),           // 20: icc.agent.v1.ChangeEvent
+	(*RuntimeEvent)(nil),          // 21: icc.agent.v1.RuntimeEvent
 }
 var file_icc_agent_v1_agent_proto_depIdxs = []int32{
-	13, // 0: icc.agent.v1.RegisterRequest.host:type_name -> icc.agent.v1.HostInfo
-	14, // 1: icc.agent.v1.RegisterResponse.cert_expires_at:type_name -> google.protobuf.Timestamp
-	14, // 2: icc.agent.v1.ConnectRequest.sent_at:type_name -> google.protobuf.Timestamp
-	4,  // 3: icc.agent.v1.ConnectRequest.hello:type_name -> icc.agent.v1.Hello
-	5,  // 4: icc.agent.v1.ConnectRequest.heartbeat:type_name -> icc.agent.v1.Heartbeat
-	15, // 5: icc.agent.v1.ConnectRequest.inventory:type_name -> icc.agent.v1.InventorySnapshot
-	16, // 6: icc.agent.v1.ConnectRequest.metrics:type_name -> icc.agent.v1.MetricBatch
-	17, // 7: icc.agent.v1.ConnectRequest.logs:type_name -> icc.agent.v1.LogBatch
-	18, // 8: icc.agent.v1.ConnectRequest.change:type_name -> icc.agent.v1.ChangeEvent
-	19, // 9: icc.agent.v1.ConnectRequest.runtime:type_name -> icc.agent.v1.RuntimeEvent
-	6,  // 10: icc.agent.v1.ConnectRequest.command_result:type_name -> icc.agent.v1.CommandResult
-	13, // 11: icc.agent.v1.Hello.host:type_name -> icc.agent.v1.HostInfo
-	8,  // 12: icc.agent.v1.ConnectResponse.hello_ack:type_name -> icc.agent.v1.HelloAck
-	10, // 13: icc.agent.v1.ConnectResponse.ack:type_name -> icc.agent.v1.Ack
-	11, // 14: icc.agent.v1.ConnectResponse.command:type_name -> icc.agent.v1.Command
-	9,  // 15: icc.agent.v1.HelloAck.config:type_name -> icc.agent.v1.AgentConfig
-	14, // 16: icc.agent.v1.Command.issued_at:type_name -> google.protobuf.Timestamp
-	14, // 17: icc.agent.v1.Command.expires_at:type_name -> google.protobuf.Timestamp
-	12, // 18: icc.agent.v1.Command.container_action:type_name -> icc.agent.v1.ContainerAction
+	15, // 0: icc.agent.v1.RegisterRequest.host:type_name -> icc.agent.v1.HostInfo
+	16, // 1: icc.agent.v1.RegisterResponse.cert_expires_at:type_name -> google.protobuf.Timestamp
+	16, // 2: icc.agent.v1.ConnectRequest.sent_at:type_name -> google.protobuf.Timestamp
+	6,  // 3: icc.agent.v1.ConnectRequest.hello:type_name -> icc.agent.v1.Hello
+	7,  // 4: icc.agent.v1.ConnectRequest.heartbeat:type_name -> icc.agent.v1.Heartbeat
+	17, // 5: icc.agent.v1.ConnectRequest.inventory:type_name -> icc.agent.v1.InventorySnapshot
+	18, // 6: icc.agent.v1.ConnectRequest.metrics:type_name -> icc.agent.v1.MetricBatch
+	19, // 7: icc.agent.v1.ConnectRequest.logs:type_name -> icc.agent.v1.LogBatch
+	20, // 8: icc.agent.v1.ConnectRequest.change:type_name -> icc.agent.v1.ChangeEvent
+	21, // 9: icc.agent.v1.ConnectRequest.runtime:type_name -> icc.agent.v1.RuntimeEvent
+	8,  // 10: icc.agent.v1.ConnectRequest.command_result:type_name -> icc.agent.v1.CommandResult
+	15, // 11: icc.agent.v1.Hello.host:type_name -> icc.agent.v1.HostInfo
+	10, // 12: icc.agent.v1.ConnectResponse.hello_ack:type_name -> icc.agent.v1.HelloAck
+	12, // 13: icc.agent.v1.ConnectResponse.ack:type_name -> icc.agent.v1.Ack
+	13, // 14: icc.agent.v1.ConnectResponse.command:type_name -> icc.agent.v1.Command
+	11, // 15: icc.agent.v1.HelloAck.config:type_name -> icc.agent.v1.AgentConfig
+	16, // 16: icc.agent.v1.Command.issued_at:type_name -> google.protobuf.Timestamp
+	16, // 17: icc.agent.v1.Command.expires_at:type_name -> google.protobuf.Timestamp
+	14, // 18: icc.agent.v1.Command.container_action:type_name -> icc.agent.v1.ContainerAction
 	0,  // 19: icc.agent.v1.ContainerAction.kind:type_name -> icc.agent.v1.ContainerAction.Kind
-	1,  // 20: icc.agent.v1.AgentService.Register:input_type -> icc.agent.v1.RegisterRequest
-	3,  // 21: icc.agent.v1.AgentService.Connect:input_type -> icc.agent.v1.ConnectRequest
-	2,  // 22: icc.agent.v1.AgentService.Register:output_type -> icc.agent.v1.RegisterResponse
-	7,  // 23: icc.agent.v1.AgentService.Connect:output_type -> icc.agent.v1.ConnectResponse
-	22, // [22:24] is the sub-list for method output_type
-	20, // [20:22] is the sub-list for method input_type
+	1,  // 20: icc.agent.v1.AgentService.GetCenterInfo:input_type -> icc.agent.v1.GetCenterInfoRequest
+	3,  // 21: icc.agent.v1.AgentService.Register:input_type -> icc.agent.v1.RegisterRequest
+	5,  // 22: icc.agent.v1.AgentService.Connect:input_type -> icc.agent.v1.ConnectRequest
+	2,  // 23: icc.agent.v1.AgentService.GetCenterInfo:output_type -> icc.agent.v1.GetCenterInfoResponse
+	4,  // 24: icc.agent.v1.AgentService.Register:output_type -> icc.agent.v1.RegisterResponse
+	9,  // 25: icc.agent.v1.AgentService.Connect:output_type -> icc.agent.v1.ConnectResponse
+	23, // [23:26] is the sub-list for method output_type
+	20, // [20:23] is the sub-list for method input_type
 	20, // [20:20] is the sub-list for extension type_name
 	20, // [20:20] is the sub-list for extension extendee
 	0,  // [0:20] is the sub-list for field type_name
@@ -1220,7 +1308,7 @@ func file_icc_agent_v1_agent_proto_init() {
 	file_icc_agent_v1_changes_proto_init()
 	file_icc_agent_v1_inventory_proto_init()
 	file_icc_agent_v1_telemetry_proto_init()
-	file_icc_agent_v1_agent_proto_msgTypes[2].OneofWrappers = []any{
+	file_icc_agent_v1_agent_proto_msgTypes[4].OneofWrappers = []any{
 		(*ConnectRequest_Hello)(nil),
 		(*ConnectRequest_Heartbeat)(nil),
 		(*ConnectRequest_Inventory)(nil),
@@ -1230,12 +1318,12 @@ func file_icc_agent_v1_agent_proto_init() {
 		(*ConnectRequest_Runtime)(nil),
 		(*ConnectRequest_CommandResult)(nil),
 	}
-	file_icc_agent_v1_agent_proto_msgTypes[6].OneofWrappers = []any{
+	file_icc_agent_v1_agent_proto_msgTypes[8].OneofWrappers = []any{
 		(*ConnectResponse_HelloAck)(nil),
 		(*ConnectResponse_Ack)(nil),
 		(*ConnectResponse_Command)(nil),
 	}
-	file_icc_agent_v1_agent_proto_msgTypes[10].OneofWrappers = []any{
+	file_icc_agent_v1_agent_proto_msgTypes[12].OneofWrappers = []any{
 		(*Command_ContainerAction)(nil),
 	}
 	type x struct{}
@@ -1244,7 +1332,7 @@ func file_icc_agent_v1_agent_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_icc_agent_v1_agent_proto_rawDesc), len(file_icc_agent_v1_agent_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

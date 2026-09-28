@@ -33,6 +33,19 @@ docker compose up -d --build
 
 Порты меняются в `.env` (см. `.env.example`).
 
+## Подключение сервера
+
+```bash
+# токен регистрации (одноразовый)
+docker compose exec backend dotnet Icc.ControlPlane.dll agents create-token
+
+# на сервере
+cd testbed/agent && ICC_CENTER=<центр>:9090 ICC_TOKEN=<токен> docker compose up -d --build
+```
+
+Подробнее — [agent/README.md](agent/README.md). Стенд, нагрузка и инжектор
+сбоев — [testbed/README.md](testbed/README.md), [testbed/faults/README.md](testbed/faults/README.md).
+
 ## Разработка
 
 ```bash

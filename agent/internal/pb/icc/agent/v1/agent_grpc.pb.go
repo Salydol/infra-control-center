@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AgentService_Register_FullMethodName = "/icc.agent.v1.AgentService/Register"
-	AgentService_Connect_FullMethodName  = "/icc.agent.v1.AgentService/Connect"
+	AgentService_GetCenterInfo_FullMethodName = "/icc.agent.v1.AgentService/GetCenterInfo"
+	AgentService_Register_FullMethodName      = "/icc.agent.v1.AgentService/Register"
+	AgentService_Connect_FullMethodName       = "/icc.agent.v1.AgentService/Connect"
 )
 
 // AgentServiceClient is the client API for AgentService service.
@@ -33,6 +34,9 @@ const (
 // портов. Register вызывается один раз по TLS без клиентского сертификата,
 // все остальные вызовы идут по mTLS с сертификатом, выданным при регистрации.
 type AgentServiceClient interface {
+	// Сертификат CA центра. Вызывается до регистрации без проверки сервера:
+	// агент сверяет хеш CA с хешем из токена и только после этого доверяет центру.
+	GetCenterInfo(ctx context.Context, in *GetCenterInfoRequest, opts ...grpc.CallOption) (*GetCenterInfoResponse, error)
 	// Одноразовая регистрация: агент присылает токен и CSR, центр возвращает
 	// идентификатор агента и подписанный клиентский сертификат.
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
@@ -47,6 +51,16 @@ type agentServiceClient struct {
 
 func NewAgentServiceClient(cc grpc.ClientConnInterface) AgentServiceClient {
 	return &agentServiceClient{cc}
+}
+
+func (c *agentServiceClient) GetCenterInfo(ctx context.Context, in *GetCenterInfoRequest, opts ...grpc.CallOption) (*GetCenterInfoResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCenterInfoResponse)
+	err := c.cc.Invoke(ctx, AgentService_GetCenterInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *agentServiceClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
@@ -82,6 +96,9 @@ type AgentService_ConnectClient = grpc.BidiStreamingClient[ConnectRequest, Conne
 // портов. Register вызывается один раз по TLS без клиентского сертификата,
 // все остальные вызовы идут по mTLS с сертификатом, выданным при регистрации.
 type AgentServiceServer interface {
+	// Сертификат CA центра. Вызывается до регистрации без проверки сервера:
+	// агент сверяет хеш CA с хешем из токена и только после этого доверяет центру.
+	GetCenterInfo(context.Context, *GetCenterInfoRequest) (*GetCenterInfoResponse, error)
 	// Одноразовая регистрация: агент присылает токен и CSR, центр возвращает
 	// идентификатор агента и подписанный клиентский сертификат.
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
@@ -98,6 +115,9 @@ type AgentServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAgentServiceServer struct{}
 
+func (UnimplementedAgentServiceServer) GetCenterInfo(context.Context, *GetCenterInfoRequest) (*GetCenterInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCenterInfo not implemented")
+}
 func (UnimplementedAgentServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
@@ -123,6 +143,24 @@ func RegisterAgentServiceServer(s grpc.ServiceRegistrar, srv AgentServiceServer)
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&AgentService_ServiceDesc, srv)
+}
+
+func _AgentService_GetCenterInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCenterInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AgentServiceServer).GetCenterInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AgentService_GetCenterInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AgentServiceServer).GetCenterInfo(ctx, req.(*GetCenterInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _AgentService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -157,6 +195,10 @@ var AgentService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "icc.agent.v1.AgentService",
 	HandlerType: (*AgentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetCenterInfo",
+			Handler:    _AgentService_GetCenterInfo_Handler,
+		},
 		{
 			MethodName: "Register",
 			Handler:    _AgentService_Register_Handler,

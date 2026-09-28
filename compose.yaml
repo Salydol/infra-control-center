@@ -53,8 +53,11 @@ services:
       Storage__VictoriaMetricsUrl: http://victoriametrics:8428
       Storage__VictoriaLogsUrl: http://victorialogs:9428
       Ai__Url: http://ai:8000
+    volumes:
+      # CA центра: при потере тома все агенты придётся регистрировать заново.
+      - pki-data:/data/pki
     ports:
-      # Агенты подключаются к центру по gRPC.
+      # Агенты подключаются к центру по gRPC поверх mTLS.
       - "${AGENT_GRPC_PORT:-9090}:9090"
     depends_on:
       postgres:
@@ -83,6 +86,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  pki-data:
   postgres-data:
   vm-data:
   vl-data:

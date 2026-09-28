@@ -1,9 +1,8 @@
 using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Icc.ControlPlane.Tests;
 
-public class HealthTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+public class HealthTests(ControlPlaneFactory factory) : IClassFixture<ControlPlaneFactory>
 {
     [Fact]
     public async Task Healthz_ReturnsOk()

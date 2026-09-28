@@ -15,6 +15,10 @@ option csharp_namespace = "Icc.Contracts.Agent.V1";
 // портов. Register вызывается один раз по TLS без клиентского сертификата,
 // все остальные вызовы идут по mTLS с сертификатом, выданным при регистрации.
 service AgentService {
+  // Сертификат CA центра. Вызывается до регистрации без проверки сервера:
+  // агент сверяет хеш CA с хешем из токена и только после этого доверяет центру.
+  rpc GetCenterInfo(GetCenterInfoRequest) returns (GetCenterInfoResponse);
+
   // Одноразовая регистрация: агент присылает токен и CSR, центр возвращает
   // идентификатор агента и подписанный клиентский сертификат.
   rpc Register(RegisterRequest) returns (RegisterResponse);
@@ -22,6 +26,12 @@ service AgentService {
   // Основной двунаправленный поток. Вверх — данные и события,
   // вниз — команды и служебные сообщения. Первое сообщение агента — Hello.
   rpc Connect(stream ConnectRequest) returns (stream ConnectResponse);
+}
+
+message GetCenterInfoRequest {}
+
+message GetCenterInfoResponse {
+  string ca_cert_pem = 1;
 }
 
 message RegisterRequest {
