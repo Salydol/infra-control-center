@@ -59,6 +59,13 @@ services:
     ports:
       # Агенты подключаются к центру по gRPC поверх mTLS.
       - "${AGENT_GRPC_PORT:-9090}:9090"
+    healthcheck:
+      # В образе aspnet нет curl: запрос через /dev/tcp в bash.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /healthz HTTP/1.0\r\n\r\n' >&3 && grep -q '200 OK' <&3"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
     depends_on:
       postgres:
         condition: service_healthy
@@ -82,7 +89,8 @@ services:
     ports:
       - "${WEB_PORT:-8088}:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
