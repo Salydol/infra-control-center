@@ -1,0 +1,20 @@
+# Весь стенд на одной машине (COMPOSE_PROFILES=node1,node2,node3).
+[campaign]
+gateway_url = "http://localhost:8000"
+runs_dir = "../runs"
+
+[nodes.local]
+deploy_dir = "../app/deploy"
+compose_files = ["compose.yaml"]
+
+[services]
+gateway = "local"
+api = "local"
+catalog = "local"
+rabbitmq = "local"
+payments-worker = "local"
+notifications-worker = "local"
+redis = "local"
+postgres = "local"
+# Узел генератора нагрузки (контейнер shop-load-k6-1).
+load = "local"

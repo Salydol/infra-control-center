@@ -35,9 +35,19 @@ public sealed class NotificationConsumer(
     protected override ushort Prefetch => startupOptions.Value.Prefetch;
     protected override ushort Concurrency => startupOptions.Value.Concurrency;
 
+    // Используется только дефектной сборкой memory-leak: «кэш шаблонов», который никогда не чистится.
+    private static readonly List<byte[]> RenderedTemplates = [];
+
     protected override async Task HandleAsync(OrderPaid message, CancellationToken ct)
     {
         var o = options.CurrentValue;
+        if (BuildFault.Is("memory-leak"))
+        {
+            var rendered = new byte[1024 * 1024];
+            Random.Shared.NextBytes(rendered);
+            lock (RenderedTemplates)
+                RenderedTemplates.Add(rendered);
+        }
 
         var first = await DependencyMetrics.TrackAsync("redis", "dedup", () => redis.GetDatabase().StringSetAsync(
             $"notified:{message.OrderId}", 1, TimeSpan.FromSeconds(o.DedupTtlSeconds), When.NotExists));

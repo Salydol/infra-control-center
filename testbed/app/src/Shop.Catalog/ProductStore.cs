@@ -76,6 +76,14 @@ public sealed class ProductStore(
         })).AsList();
     }
 
+    public async Task<long> CountOrdersAsync(long productId) =>
+        await DependencyMetrics.TrackAsync("postgres", "product_orders_count", async () =>
+        {
+            await using var conn = await db.OpenConnectionAsync();
+            return await conn.ExecuteScalarAsync<long>(
+                "select count(*) from orders where product_id = @productId", new { productId });
+        });
+
     /// <summary>Списывает остаток; null — товара нет, false — не хватает.</summary>
     public async Task<(bool Found, bool Reserved, decimal Price)> ReserveAsync(long id, int quantity)
     {

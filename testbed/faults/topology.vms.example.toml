@@ -1,0 +1,31 @@
+# Стенд из трёх ВМ. Инжектор выполняет команды по SSH (нужен вход по ключу
+# без пароля и пользователь в группе docker). Скопируйте в topology.vms.toml.
+[campaign]
+gateway_url = "http://192.168.56.11:8000"
+runs_dir = "../runs"
+
+[nodes.node1]
+ssh = "icc@192.168.56.11"
+deploy_dir = "/home/icc/infra-control-center/testbed/app/deploy"
+compose_files = ["compose.yaml", "compose.distributed.yaml"]
+
+[nodes.node2]
+ssh = "icc@192.168.56.12"
+deploy_dir = "/home/icc/infra-control-center/testbed/app/deploy"
+compose_files = ["compose.yaml", "compose.distributed.yaml"]
+
+[nodes.node3]
+ssh = "icc@192.168.56.13"
+deploy_dir = "/home/icc/infra-control-center/testbed/app/deploy"
+compose_files = ["compose.yaml", "compose.distributed.yaml"]
+
+[services]
+gateway = "node1"
+api = "node1"
+catalog = "node1"
+rabbitmq = "node1"
+payments-worker = "node2"
+notifications-worker = "node2"
+redis = "node2"
+postgres = "node3"
+load = "node3"

@@ -1,0 +1,19 @@
+[project]
+name = "icc-faults"
+version = "1.0.0"
+description = "Инжектор сбоев стенда ICC: 6 классов, приманки, автоматическая разметка"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.8"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

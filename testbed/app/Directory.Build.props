@@ -1,5 +1,12 @@
 <Project>
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Дефект сборки для сбоев класса «неудачный деплой» (инжектор стенда).
+         Вшивается в метаданные сборки, а не в окружение: снаружи новая версия
+         неотличима от обычного релиза. -->
+    <BuildFault Condition="'$(BuildFault)' == ''">none</BuildFault>
   </PropertyGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="ShopBuildFault" Value="$(BuildFault)" />
+  </ItemGroup>
 </Project>

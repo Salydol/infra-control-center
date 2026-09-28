@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Shop.Common;
 
 namespace Shop.Catalog;
 
@@ -11,7 +12,12 @@ public static class ProductEndpoints
     public static void MapProductEndpoints(this WebApplication app)
     {
         app.MapGet("/products/{id:long}", async (long id, ProductStore store) =>
-            await store.GetAsync(id) is { } product ? Results.Ok(product) : Results.NotFound());
+        {
+            var product = await store.GetAsync(id);
+            if (product is not null && BuildFault.Is("unindexed-query"))
+                await store.CountOrdersAsync(id);
+            return product is null ? Results.NotFound() : Results.Ok(product);
+        });
 
         app.MapGet("/products", async (string? search, int? page, int? size,
             ProductStore store, IOptionsMonitor<CatalogOptions> options) =>

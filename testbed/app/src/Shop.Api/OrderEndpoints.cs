@@ -84,6 +84,8 @@ public static class OrderEndpoints
         var (orderId, createdAt) = await DependencyMetrics.TrackAsync("postgres", "order_insert", async () =>
         {
             await using var conn = await db.OpenConnectionAsync(ct);
+            if (BuildFault.Is("slow-order-query"))
+                await conn.ExecuteAsync("select pg_sleep(0.8)");
             return await conn.QuerySingleAsync<(long, DateTime)>(
                 """
                 insert into orders (customer_id, product_id, quantity, amount, status)

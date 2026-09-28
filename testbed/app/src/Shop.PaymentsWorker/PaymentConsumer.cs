@@ -18,6 +18,10 @@ public sealed class PaymentConsumer(
 
     protected override async Task HandleAsync(OrderCreated message, CancellationToken ct)
     {
+        if (BuildFault.Is("amount-parse-bug") && message.Amount > 250)
+            _ = decimal.Parse(message.Amount.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("ru-RU")),
+                System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture);
+
         string status;
         string? error = null;
         try

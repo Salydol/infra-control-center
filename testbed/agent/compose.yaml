@@ -1,0 +1,40 @@
+# Агент ICC на узле стенда.
+#
+# Первый запуск (регистрация):
+#   ICC_CENTER=<адрес центра>:9090 ICC_TOKEN=<токен> docker compose up -d --build
+# Токен выдаёт центр:
+#   docker compose exec backend dotnet Icc.ControlPlane.dll agents create-token
+# После регистрации ключи лежат в томе agent-data, токен больше не нужен.
+name: icc-agent
+
+services:
+  agent:
+    image: icc-agent:${ICC_AGENT_VERSION:-dev}
+    build:
+      context: ../../agent
+      args:
+        VERSION: ${ICC_AGENT_VERSION:-dev}
+    # Сеть хоста: метрики сетевых интерфейсов хоста, а не контейнера.
+    network_mode: host
+    environment:
+      ICC_CENTER: ${ICC_CENTER:-localhost:9090}
+      ICC_TOKEN: ${ICC_TOKEN:-}
+      HOST_PROC: /host/proc
+      HOST_SYS: /host/sys
+      HOST_ETC: /host/etc
+      HOST_ROOT: /host/root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc:/host/etc:ro
+      # Корень хоста — только чтобы узнать заполненность дисков (statfs).
+      - /:/host/root:ro
+      - agent-data:/var/lib/icc-agent
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 128M }
+    restart: unless-stopped
+
+volumes:
+  agent-data:
