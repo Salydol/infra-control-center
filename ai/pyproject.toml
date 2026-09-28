@@ -1,0 +1,43 @@
+[project]
+name = "icc-ai"
+version = "0.1.0"
+description = "AI-модуль ICC: детектор аномалий, шаблоны логов, ранжирование первопричин, LLM-объяснение"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic-settings>=2.6",
+]
+
+[project.optional-dependencies]
+# Тяжёлые ML-зависимости подключаются на неделях 8–9.
+ml = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "lightgbm",
+    "drain3",
+    "torch",
+]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/icc_ai"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

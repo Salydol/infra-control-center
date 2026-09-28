@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package icc.agent.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Icc.Contracts.Agent.V1";
+
+message HostInfo {
+  string hostname = 1;
+  string os = 2;
+  string kernel_version = 3;
+  string architecture = 4;
+  uint32 cpu_cores = 5;
+  uint64 memory_total_bytes = 6;
+  string docker_version = 7;
+  repeated string ip_addresses = 8;
+}
+
+// Полный снимок того, что работает на хосте. Отправляется при подключении
+// и периодически; центр сверяет его с предыдущим.
+message InventorySnapshot {
+  google.protobuf.Timestamp collected_at = 1;
+  HostInfo host = 2;
+  repeated Container containers = 3;
+  repeated ComposeProject compose_projects = 4;
+}
+
+message Container {
+  string id = 1;
+  string name = 2;
+  // Ссылка на образ, как в compose (например, "postgres:17").
+  string image = 3;
+  // Идентификатор образа (sha256:...), по нему видна подмена тега.
+  string image_id = 4;
+  string state = 5;
+  string status = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp started_at = 8;
+  uint32 restart_count = 9;
+  // Пусто, если контейнер не принадлежит compose-проекту.
+  string compose_project = 10;
+  string compose_service = 11;
+  map<string, string> labels = 12;
+  repeated PortBinding ports = 13;
+  ResourceLimits limits = 14;
+  // Хеш итогового environment контейнера (значения не передаются в снимке).
+  string env_hash = 15;
+}
+
+message PortBinding {
+  uint32 container_port = 1;
+  string protocol = 2;
+  string host_ip = 3;
+  uint32 host_port = 4;
+}
+
+message ResourceLimits {
+  // 0 — без ограничения.
+  double cpus = 1;
+  uint64 memory_bytes = 2;
+}
+
+message ComposeProject {
+  string name = 1;
+  string working_dir = 2;
+  repeated string config_files = 3;
+  repeated string env_files = 4;
+  repeated string services = 5;
+}

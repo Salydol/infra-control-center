@@ -1,0 +1,9 @@
+**/bin
+**/obj
+**/node_modules
+**/.venv
+**/dist
+.git
+experiments
+thesis
+testbed

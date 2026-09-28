@@ -1,0 +1,31 @@
+# Общее
+.env
+*.log
+.DS_Store
+.idea/
+.vs/
+*.user
+
+# .NET
+bin/
+obj/
+TestResults/
+
+# Go
+agent/dist/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+web/dist/
+
+# Данные экспериментов (большие файлы — не в git)
+experiments/data/raw/
+testbed/runs/

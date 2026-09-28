@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package icc.agent.v1;
+
+import "google/protobuf/timestamp.proto";
+import "icc/agent/v1/changes.proto";
+import "icc/agent/v1/inventory.proto";
+import "icc/agent/v1/telemetry.proto";
+
+option csharp_namespace = "Icc.Contracts.Agent.V1";
+
+// AgentService — связь агента с центром.
+//
+// Соединение всегда открывает агент: на управляемых серверах нет входящих
+// портов. Register вызывается один раз по TLS без клиентского сертификата,
+// все остальные вызовы идут по mTLS с сертификатом, выданным при регистрации.
+service AgentService {
+  // Одноразовая регистрация: агент присылает токен и CSR, центр возвращает
+  // идентификатор агента и подписанный клиентский сертификат.
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+
+  // Основной двунаправленный поток. Вверх — данные и события,
+  // вниз — команды и служебные сообщения. Первое сообщение агента — Hello.
+  rpc Connect(stream ConnectRequest) returns (stream ConnectResponse);
+}
+
+message RegisterRequest {
+  // Одноразовый токен регистрации, выданный в интерфейсе центра.
+  string token = 1;
+  // PKCS#10 CSR в PEM. Закрытый ключ не покидает сервер.
+  string csr_pem = 2;
+  HostInfo host = 3;
+  string agent_version = 4;
+}
+
+message RegisterResponse {
+  string agent_id = 1;
+  // Клиентский сертификат агента в PEM.
+  string client_cert_pem = 2;
+  // Сертификат CA центра, которым агент проверяет сервер.
+  string ca_cert_pem = 3;
+  google.protobuf.Timestamp cert_expires_at = 4;
+}
+
+// ---------- Агент → центр ----------
+
+message ConnectRequest {
+  // Монотонный номер сообщения в рамках соединения; используется в Ack.
+  uint64 seq = 1;
+  google.protobuf.Timestamp sent_at = 2;
+
+  oneof payload {
+    Hello hello = 10;
+    Heartbeat heartbeat = 11;
+    InventorySnapshot inventory = 12;
+    MetricBatch metrics = 13;
+    LogBatch logs = 14;
+    ChangeEvent change = 15;
+    RuntimeEvent runtime = 16;
+    CommandResult command_result = 17;
+  }
+}
+
+message Hello {
+  string agent_id = 1;
+  string agent_version = 2;
+  HostInfo host = 3;
+  // Последний seq, подтверждённый центром в прошлой сессии: агент дошлёт
+  // буферизованные на диске сообщения после него.
+  uint64 last_acked_seq = 4;
+}
+
+message Heartbeat {
+  // Сообщений в дисковом буфере, ещё не подтверждённых центром.
+  uint64 buffered_messages = 1;
+  double agent_cpu_percent = 2;
+  uint64 agent_rss_bytes = 3;
+}
+
+// Результат выполнения команды центра.
+message CommandResult {
+  string command_id = 1;
+  bool success = 2;
+  string error = 3;
+  string output = 4;
+}
+
+// ---------- Центр → агент ----------
+
+message ConnectResponse {
+  oneof payload {
+    HelloAck hello_ack = 10;
+    Ack ack = 11;
+    Command command = 12;
+  }
+}
+
+message HelloAck {
+  AgentConfig config = 1;
+}
+
+// Настройки сбора, которые центр задаёт агенту.
+message AgentConfig {
+  uint32 heartbeat_interval_seconds = 1;
+  uint32 metrics_interval_seconds = 2;
+  uint32 inventory_interval_seconds = 3;
+  // Максимальная длина строки лога; длиннее — обрезается.
+  uint32 max_log_line_bytes = 4;
+  // Glob-пути к дополнительным файлам настроек, изменения которых отслеживать
+  // (compose-файлы и .env проектов отслеживаются всегда).
+  repeated string watched_config_globs = 5;
+}
+
+// Подтверждение приёма: агент может удалить из буфера всё до seq включительно.
+message Ack {
+  uint64 seq = 1;
+}
+
+// Команда центра. Подписывается ключом центра (Ed25519) и имеет срок
+// действия; агент отбрасывает просроченные и повторные команды и сверяет
+// каждую с локальной политикой перед выполнением.
+message Command {
+  string id = 1;
+  // Ключ идемпотентности: повтор с тем же ключом не выполняется дважды.
+  string idempotency_key = 2;
+  // Кто инициировал (пользователь или система) — для аудита на стороне агента.
+  string actor = 3;
+  // Право, которое проверил центр, например "container.restart".
+  string permission = 4;
+  google.protobuf.Timestamp issued_at = 5;
+  google.protobuf.Timestamp expires_at = 6;
+  // Подпись Ed25519 над каноническим сериализованным Command с пустым signature.
+  bytes signature = 7;
+
+  oneof action {
+    ContainerAction container_action = 20;
+  }
+}
+
+message ContainerAction {
+  enum Kind {
+    KIND_UNSPECIFIED = 0;
+    KIND_START = 1;
+    KIND_STOP = 2;
+    KIND_RESTART = 3;
+  }
+  Kind kind = 1;
+  string container_id = 2;
+}

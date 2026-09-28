@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package icc.agent.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Icc.Contracts.Agent.V1";
+
+// Изменение конфигурации, обнаруженное агентом. Это главный источник
+// признаков «истории изменений» для модели ранжирования первопричин.
+message ChangeEvent {
+  // UUID, генерируется агентом; центр по нему отбрасывает дубли.
+  string id = 1;
+  google.protobuf.Timestamp detected_at = 2;
+  ChangeKind kind = 3;
+  ChangeTarget target = 4;
+  // Построчные или поключевые различия «было → стало».
+  repeated FieldChange fields = 5;
+  // Унифицированный diff для файлов (compose, .env, настройки).
+  string unified_diff = 6;
+  // Кто сделал изменение, если агент может это определить
+  // (например, пользователь из auditd или "icc" для изменений через центр).
+  string actor = 7;
+}
+
+enum ChangeKind {
+  CHANGE_KIND_UNSPECIFIED = 0;
+  // Контейнер сервиса запущен с другим образом (другой image_id).
+  CHANGE_KIND_IMAGE_CHANGED = 1;
+  // Контейнер пересоздан (новый id у того же compose-сервиса).
+  CHANGE_KIND_CONTAINER_RECREATED = 2;
+  // Изменился environment контейнера.
+  CHANGE_KIND_ENV_CHANGED = 3;
+  // Изменился compose-файл проекта.
+  CHANGE_KIND_COMPOSE_FILE_CHANGED = 4;
+  // Изменился .env-файл проекта.
+  CHANGE_KIND_ENV_FILE_CHANGED = 5;
+  // Изменился отслеживаемый файл настроек (appsettings.json и т.п.).
+  CHANGE_KIND_CONFIG_FILE_CHANGED = 6;
+  // Появился новый контейнер или compose-сервис.
+  CHANGE_KIND_CONTAINER_ADDED = 7;
+  // Контейнер или compose-сервис удалён.
+  CHANGE_KIND_CONTAINER_REMOVED = 8;
+  // Изменились лимиты ресурсов контейнера.
+  CHANGE_KIND_LIMITS_CHANGED = 9;
+}
+
+message ChangeTarget {
+  string container_id = 1;
+  string container_name = 2;
+  string compose_project = 3;
+  string compose_service = 4;
+  // Для файловых изменений — абсолютный путь на хосте.
+  string file_path = 5;
+}
+
+message FieldChange {
+  string key = 1;
+  string before = 2;
+  string after = 3;
+  // Значение похоже на секрет и заменено маской; сравниваются только хеши.
+  bool masked = 4;
+}
+
+// Событие жизненного цикла контейнера (не изменение конфигурации).
+message RuntimeEvent {
+  google.protobuf.Timestamp timestamp = 1;
+  RuntimeEventKind kind = 2;
+  string container_id = 3;
+  string container_name = 4;
+  string compose_project = 5;
+  string compose_service = 6;
+  // Для DIED.
+  int32 exit_code = 7;
+  // Для HEALTH_CHANGED: healthy, unhealthy, starting.
+  string health_status = 8;
+}
+
+enum RuntimeEventKind {
+  RUNTIME_EVENT_KIND_UNSPECIFIED = 0;
+  RUNTIME_EVENT_KIND_STARTED = 1;
+  RUNTIME_EVENT_KIND_STOPPED = 2;
+  RUNTIME_EVENT_KIND_DIED = 3;
+  RUNTIME_EVENT_KIND_OOM_KILLED = 4;
+  RUNTIME_EVENT_KIND_RESTARTED = 5;
+  RUNTIME_EVENT_KIND_HEALTH_CHANGED = 6;
+}
